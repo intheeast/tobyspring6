@@ -1,4 +1,4 @@
-package com.intheeast.springframe.dao;
+package com.intheeast.springframe.daotest;
 
 import javax.sql.DataSource;
 
@@ -6,9 +6,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
-// Java based Configuration Metadata
+import com.intheeast.springframe.dao.UserDao;
+
 @Configuration
-public class DaoFactory {
+public class TestDaoFactory {
 	
 	@Bean
 	public DataSource dataSourceM() {
@@ -40,5 +41,6 @@ public class DaoFactory {
 		userDao.setDataSource(dataSourceM());
 		return userDao;
 	}
+
 
 }

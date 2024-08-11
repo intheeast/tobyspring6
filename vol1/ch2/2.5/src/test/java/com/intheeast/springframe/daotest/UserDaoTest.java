@@ -39,8 +39,6 @@ public class UserDaoTest {
 	@Autowired
 	ApplicationContext context;
 	
-	@Autowired  // String IoC Container에 의해서 해당 필드 userDao에
-	            // userDao 빈을 주입함
 	private UserDao userDao; 
 	
 	private User user1;
@@ -54,9 +52,8 @@ public class UserDaoTest {
 	
 	@BeforeEach
 	public void setUp() {
-//		ApplicationContext context = 
-//				new AnnotationConfigApplicationContext(DaoFactory.class);
-//		this.dao = context.getBean("userDao", UserDao.class);
+
+		this.userDao = context.getBean("userDao", UserDao.class);
 		
 		
 		this.user1 = new User("gyumee", "¹Ú¼ºÃ¶", "springno1");
