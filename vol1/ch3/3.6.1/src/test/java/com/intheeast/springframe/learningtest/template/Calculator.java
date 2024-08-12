@@ -7,11 +7,14 @@ import java.io.IOException;
 public class Calculator {
 	
 	public Integer calcSum(String filepath) throws IOException {
+//		LineCallback<Integer> sumCallback = 
+//			new LineCallback<Integer>() {
+//				public Integer doSomethingWithLine(String line, Integer value) {
+//					return value + Integer.valueOf(line);
+//				}};
+				
 		LineCallback<Integer> sumCallback = 
-			new LineCallback<Integer>() {
-				public Integer doSomethingWithLine(String line, Integer value) {
-					return value + Integer.valueOf(line);
-				}};
+				(line, value) -> value + Integer.valueOf(line);
 				
 		return lineReadTemplate(filepath, sumCallback, 0);
 	}
@@ -36,7 +39,9 @@ public class Calculator {
 		return lineReadTemplate(filepath, concatenateCallback, "");
 	}	
 
-	public <T> T lineReadTemplate(String filepath, LineCallback<T> callback, T initVal) throws IOException {
+	public <T> T lineReadTemplate(String filepath, 
+			LineCallback<T> callback, 
+			T initVal) throws IOException {
 		BufferedReader br = null;
 		try {
 			br = new BufferedReader(new FileReader(filepath));
