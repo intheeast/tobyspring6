@@ -4,15 +4,22 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 
 import com.intheeast.springframe.domain.User;
 
 public class UserDao {
+	
+	RowMapper rm;
+	//
 	
 	private DataSource dataSource;
 	private JdbcTemplate jdbcTemplate;
@@ -35,6 +42,7 @@ public class UserDao {
 	
 	public User get(String id) throws ClassNotFoundException, SQLException {
 		
+			
 		Connection c = this.dataSource.getConnection();
 		
 		PreparedStatement ps = c

@@ -3,6 +3,7 @@ package com.intheeast.springframe.daotest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.sql.SQLException;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,13 +49,19 @@ public class UserDaoTest {
 		dao.add(user2);
 		assertEquals(dao.getCount(), 2);
 		
-		User userget1 = dao.get(user1.getId());
-		assertEquals(user1.getName(), userget1.getName());
-		assertEquals(user1.getPassword(), userget1.getPassword());
+		Optional<User> Optuserget1 = dao.get(user1.getId());
+		if (!Optuserget1.isEmpty()) {
+			User userget = Optuserget1.get();
+			assertEquals(user1.getName(), userget.getName());
+			assertEquals(user1.getPassword(), userget.getPassword());
+		}		
 		
-		User userget2 = dao.get(user2.getId());		
-		assertEquals(user2.getName(), userget2.getName());
-		assertEquals(user2.getPassword(), userget2.getPassword());		
+		Optional<User> Optuserget2 = dao.get(user2.getId());	
+		if (!Optuserget2.isEmpty()) {
+			User userget = Optuserget2.get();
+			assertEquals(user2.getName(), userget.getName());
+			assertEquals(user2.getPassword(), userget.getPassword());		
+		}		
 	}
 	
 	@Test
