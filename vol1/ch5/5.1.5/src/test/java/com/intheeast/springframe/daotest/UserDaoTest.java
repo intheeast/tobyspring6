@@ -42,10 +42,10 @@ public class UserDaoTest {
 		
 	@BeforeEach
 	public void setUp() {	
+		this.user1 = new User("bumjin", "박범진", "springno3", Level.GOLD, 100, 40);
+		this.user2 = new User("gyumee", "박성철", "springno1", Level.BASIC, 1, 0);
+		this.user3 = new User("leegw700", "이길원", "springno2", Level.SILVER, 55, 10);
 		
-		this.user1 = new User("gyumee", "박성철", "springno1", Level.BASIC, 1, 0);
-		this.user2 = new User("leegw700", "이길원", "springno2", Level.SILVER, 55, 10);
-		this.user3 = new User("bumjin", "박범진", "springno3", Level.GOLD, 100, 40);
 	}
 	
 	@Test
@@ -114,10 +114,10 @@ public class UserDaoTest {
 		
 		dao.add(user3); 
 		List<User> users3 = dao.getAll();
-		assertEquals(users3.size(), 3);	
-		checkSameUser(user3, users3.get(0));  
-		checkSameUser(user1, users3.get(1));  
-		checkSameUser(user2, users3.get(2)); 
+		assertEquals(users3.size(), 3);
+		checkSameUser(user1, users3.get(0));  
+		checkSameUser(user2, users3.get(1));  
+		checkSameUser(user3, users3.get(2)); 
 		
 		
 		return ;
@@ -172,6 +172,7 @@ public class UserDaoTest {
 		user1.setRecommend(999);
 		dao.update(user1);
 		
+		///////////////////////////////
 		Optional<User> Optuser1update = dao.get(user1.getId()); ////////////////
 		
 		if(!Optuser1update.isEmpty()) {

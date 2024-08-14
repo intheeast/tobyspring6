@@ -11,15 +11,12 @@ import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
+import com.intheeast.springframe.domain.Level;
 import com.intheeast.springframe.domain.User;
 
 public class UserDaoJdbc implements UserDao {
 	
 	private JdbcTemplate jdbcTemplate;
-	
-	public UserDaoJdbc() {
-		
-	}
 	
 	public void setDataSource(DataSource dataSource) {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
@@ -31,6 +28,9 @@ public class UserDaoJdbc implements UserDao {
 			user.setId(rs.getString("id"));
 			user.setName(rs.getString("name"));
 			user.setPassword(rs.getString("password"));
+			user.setLevel(Level.valueOf(rs.getInt("level")));
+			user.setLogin(rs.getInt("login"));
+			user.setRecommend(rs.getInt("recommend"));
 			return user;
 		};
 	}
@@ -38,11 +38,19 @@ public class UserDaoJdbc implements UserDao {
 
 	@Override
 	public void add(User user) {
-		this.jdbcTemplate.
-		update("insert into users(id, name, password) values(?,?,?)",
-				user.getId(), 
-				user.getName(), 
-				user.getPassword());
+		try {
+			this.jdbcTemplate.update(
+					"insert into users(id, name, password, level, login, recommend) " +
+							"values(?,?,?,?,?,?)", 
+							user.getId(), 
+							user.getName(), 
+							user.getPassword(), 
+							user.getLevel().intValue(), 
+							user.getLogin(), 
+							user.getRecommend());
+		} catch (DataAccessException de) {
+			System.out.println(de);			
+		} 
 
 	}
 
@@ -62,9 +70,7 @@ public class UserDaoJdbc implements UserDao {
 
 	@Override
 	public List<User> getAll() {
-//		return this.jdbcTemplate.query("select * from users order by id",
-//				userRowMapper());
-		return this.jdbcTemplate.query("select * from users",
+		return this.jdbcTemplate.query("select * from users order by id",
 				userRowMapper());
 
 	}
@@ -81,6 +87,25 @@ public class UserDaoJdbc implements UserDao {
 				(rs, rowNum) -> rs.getInt(1));
 		
 		return DataAccessUtils.singleResult(result);
+	}
+	
+	@Override
+	public void update(User user) {
+		this.jdbcTemplate.update(
+				"update users set "
+				+ "name = ?, "
+				+ "password = ?, "
+				+ "level = ?, "
+				+ "login = ?, " 
+				+ "recommend = ? "
+				+ "where id = ? ", 
+				user.getName(), 
+				user.getPassword(), 
+				user.getLevel().intValue(), ///////
+				user.getLogin(), 
+				user.getRecommend(),
+				user.getId());
+		
 	}
 
 }
