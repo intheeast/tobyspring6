@@ -68,6 +68,7 @@ public class UserServiceTest {
 		checkLevelUpgraded(users.get(4), false);
 	}
 	
+	// 
 	static class MockMailSender implements MailSender {
 		private List<String> requests = new ArrayList<String>();	
 		
@@ -152,6 +153,7 @@ public class UserServiceTest {
 			this.id = id;
 		}
 		
+		@Override
 		public void upgradeLevels() {
 			TransactionStatus status = this.getTransactionManager().
 					getTransaction(new DefaultTransactionDefinition());

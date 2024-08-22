@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -18,7 +19,7 @@ import com.intheeast.springframe.service.UserService;
 @Configuration
 public class TestServiceFactory {
 	@Bean
-public DataSource dataSource() {
+	public DataSource dataSource() {
 		
 		SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
 		
@@ -83,7 +84,8 @@ public DataSource dataSource() {
 	// 우리가 직접 configuration 한다.
 	@Bean
 	public DataSourceTransactionManager transactionManager() {
-		DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager();
+		DataSourceTransactionManager dataSourceTransactionManager = 
+				new DataSourceTransactionManager();
 		dataSourceTransactionManager.setDataSource(dataSource());
 		return dataSourceTransactionManager;
 	}	
