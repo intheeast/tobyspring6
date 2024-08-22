@@ -29,6 +29,10 @@ public class UserService {
 		this.dataSource = dataSource;
 	}
 	
+	public DataSource getDataSource() {
+		return this.dataSource;
+	}
+	
 	public void upgradeLevels() throws Exception {
 		TransactionSynchronizationManager.initSynchronization();  
 		Connection c = DataSourceUtils.getConnection(dataSource); 
@@ -52,7 +56,7 @@ public class UserService {
 		}
 	}
 	
-	private boolean canUpgradeLevel(User user) {
+	public boolean canUpgradeLevel(User user) {
 		Level currentLevel = user.getLevel(); 
 		switch(currentLevel) {                                   
 		case BASIC: return (user.getLogin() >= MIN_LOGCOUNT_FOR_SILVER); 
@@ -68,7 +72,8 @@ public class UserService {
 	}
 	
 	public void add(User user) {
-		if (user.getLevel() == null) user.setLevel(Level.BASIC);
+		if (user.getLevel() == null) 
+			user.setLevel(Level.BASIC);
 		userDao.add(user);
 	}
 
