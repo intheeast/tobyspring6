@@ -48,9 +48,7 @@ public class UserDaoJdbc implements UserDao {
 					"insert into users(id, name, password, email, level, login, recommend) " +
 							"values(?,?,?,?,?,?,?)", 
 							user.getId(), 
-							
 							user.getName(), 
-							///
 							user.getPassword(), 
 							user.getEmail(),
 							user.getLevel().intValue(), 
