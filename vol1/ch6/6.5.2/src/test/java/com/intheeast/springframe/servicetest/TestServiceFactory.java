@@ -19,6 +19,7 @@ import com.intheeast.springframe.dao.UserDao;
 import com.intheeast.springframe.dao.UserDaoJdbc;
 import com.intheeast.springframe.service.DummyMailSender;
 import com.intheeast.springframe.service.TransactionAdvice;
+import com.intheeast.springframe.service.TxProxyFactoryBean;
 import com.intheeast.springframe.service.UserService;
 import com.intheeast.springframe.service.UserServiceImpl;
 
@@ -68,16 +69,27 @@ public class TestServiceFactory {
 		return userDaoJdbc;
 	}
 	
+//	@Bean
+//	public ProxyFactoryBean userService() {
+//		ProxyFactoryBean proxyFactoryBean = new ProxyFactoryBean();
+//		proxyFactoryBean.setTarget(userServiceImpl());
+////		proxyFactoryBean.setInterfaces(null);
+//		proxyFactoryBean.setProxyTargetClass(true);
+////		proxyFactoryBean.setFrozen(false);
+//		proxyFactoryBean.setInterceptorNames("transactionAdvisor");		
+//		return proxyFactoryBean;
+//	}
+	
 	@Bean
-	public ProxyFactoryBean userService() {
-		ProxyFactoryBean proxyFactoryBean = new ProxyFactoryBean();
-		proxyFactoryBean.setTarget(userServiceImpl());
-//		proxyFactoryBean.setInterfaces(null);
-		proxyFactoryBean.setProxyTargetClass(true);
-//		proxyFactoryBean.setFrozen(false);
-//		proxyFactoryBean.addAdvisor(transactionAdvisor());
-		proxyFactoryBean.setInterceptorNames("transactionAdvisor");		
-		return proxyFactoryBean;
+	public TxProxyFactoryBean userService() {
+		TxProxyFactoryBean txProxyFactoryBean = 
+				new TxProxyFactoryBean();
+		txProxyFactoryBean.setTarget(userServiceImpl());
+		txProxyFactoryBean.setServiceInterface(UserService.class);
+		txProxyFactoryBean.setTransactionManager(transactionManager());
+		// setPattern
+		txProxyFactoryBean.setPattern("upgrade");
+		return txProxyFactoryBean;
 	}
 	
 	@Bean
