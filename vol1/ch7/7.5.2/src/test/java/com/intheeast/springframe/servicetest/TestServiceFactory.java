@@ -15,8 +15,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
@@ -30,11 +34,11 @@ import com.intheeast.springframe.dao.UserDaoJdbc;
 import com.intheeast.springframe.service.DummyMailSender;
 import com.intheeast.springframe.service.UserService;
 import com.intheeast.springframe.service.UserServiceImpl;
-import com.intheeast.springframe.sqlservice.ConcurrentHashMapSqlRegistry;
-import com.intheeast.springframe.sqlservice.SQLMapReader;
-import com.intheeast.springframe.sqlservice.SQLService;
+import com.intheeast.springframe.sqlservice.updatable.ConcurrentHashMapSqlRegistry;
+import com.intheeast.springframe.sqlservice.updatable.EmbeddedDbSqlRegistry;
 
 @Configuration
+//@EnableAspectJAutoProxy
 @EnableTransactionManagement
 @ComponentScan(basePackages = "com.intheeast.springframe")
 public class TestServiceFactory {
@@ -92,9 +96,29 @@ public class TestServiceFactory {
 	}	
 	
 	@Bean
-	public ConcurrentHashMapSqlRegistry sqlRegistry() {
-		ConcurrentHashMapSqlRegistry concurrentHashMapSqlRegistry = new ConcurrentHashMapSqlRegistry();
-		return concurrentHashMapSqlRegistry;
+	public static EmbeddedDbSqlRegistry sqlRegistry() {
+		EmbeddedDbSqlRegistry embeddedDbSqlRegistry = new EmbeddedDbSqlRegistry();
+		embeddedDbSqlRegistry.setDataSource(embeddedDatabase());
+		return embeddedDbSqlRegistry;
 	}
+	
+	@Bean
+    public static DataSource embeddedDatabase() {
+        ResourceDatabasePopulator databasePopulator = new ResourceDatabasePopulator();
+        databasePopulator.addScript(new ClassPathResource("com/intheeast/springframe/sqlservice/updatable/sqlRegistrySchema.sql"));
+
+        return new EmbeddedDatabaseBuilder()
+                .setType(EmbeddedDatabaseType.H2)
+                .setName("embeddedDatabase")
+                .setScriptEncoding("UTF-8")
+                .addScript("sqlRegistrySchema.sql")
+                .build();
+    }
+	
+//	@Bean
+//	public ConcurrentHashMapSqlRegistry sqlRegistry() {
+//		ConcurrentHashMapSqlRegistry concurrentHashMapSqlRegistry = new ConcurrentHashMapSqlRegistry();
+//		return concurrentHashMapSqlRegistry;
+//	}
 
 }

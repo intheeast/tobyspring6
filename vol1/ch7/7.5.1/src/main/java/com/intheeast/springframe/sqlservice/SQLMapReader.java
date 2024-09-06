@@ -15,6 +15,7 @@ public class SQLMapReader {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             // ClassPathResource로 resources/sqlmap.json 파일을 읽어옴
+// C:\development\Workspace\codes\spring_legacy\tobyspring6\vol1\ch7\7.5.1\src\main\resources\sqlmap.json
             ClassPathResource resource = new ClassPathResource("sqlmap.json");
 
             // InputStream으로 파일을 읽고 ObjectMapper로 변환
